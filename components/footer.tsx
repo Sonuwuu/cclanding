@@ -29,16 +29,16 @@ export function Footer() {
               paths.
             </p>
             <div className="flex space-x-4">
-              <Link href="#" className="text-gray-400 hover:text-white">
+              {/* <Link href="#" className="text-gray-400 hover:text-white">
                 <Facebook className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
+              </Link> */}
+              {/* <Link href="#" className="text-gray-400 hover:text-white">
                 <Twitter className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
+              </Link> */}
+              {/* <Link href="#" className="text-gray-400 hover:text-white">
                 <Instagram className="h-5 w-5" />
-              </Link>
-              <Link href="#" className="text-gray-400 hover:text-white">
+              </Link> */}
+              <Link href="https://www.youtube.com/channel/UCHdIwhlfeNoAM7yQICokGeA" className="text-gray-400 hover:text-white">
                 <Youtube className="h-5 w-5" />
               </Link>
             </div>
@@ -70,20 +70,20 @@ export function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 text-red-500 mr-2 mt-1 flex-shrink-0" />
-                <span className="text-gray-400">123 Education Street, Knowledge Park, New Delhi - 110001</span>
+                <span className="text-gray-400">1000/8 Govindpuri, Kalkaji, New Delhi - 110019</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 text-red-500 mr-2 flex-shrink-0" />
-                <span className="text-gray-400">+91 98765 43210</span>
+                <span className="text-gray-400">+91 78270 62742</span>
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 text-red-500 mr-2 flex-shrink-0" />
-                <span className="text-gray-400">info@challengerclasses.com</span>
+                <span className="text-gray-400">challengerclasses2018@gmail.com</span>
               </li>
             </ul>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="font-bold text-lg mb-4">Newsletter</h3>
             <p className="text-gray-400 mb-4">
               Subscribe to our newsletter for the latest updates on courses, events, and study materials.
@@ -92,7 +92,7 @@ export function Footer() {
               <Input type="email" placeholder="Your email address" className="bg-gray-800 border-gray-700 text-white" />
               <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black">Subscribe</Button>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">

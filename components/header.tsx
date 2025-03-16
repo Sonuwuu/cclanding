@@ -64,10 +64,17 @@ export function Header() {
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white">
-              Login
-            </Button>
-            <Button className="bg-red-600 hover:bg-red-700 text-white">Register Now</Button>
+            <Link href="/auth/login">
+              <Button variant="outline" className="border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white">
+                Login
+              </Button>
+            </Link>
+
+            <Link href="/auth/register">
+              <Button className="bg-red-600 hover:bg-red-700 text-white">
+                Register Now
+              </Button>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -93,13 +100,20 @@ export function Header() {
                 </Link>
               ))}
               <div className="flex flex-col space-y-2 pt-4">
-                <Button
-                  variant="outline"
-                  className="border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white w-full"
-                >
-                  Login
-                </Button>
-                <Button className="bg-red-600 hover:bg-red-700 text-white w-full">Register Now</Button>
+                <Link href="/auth/login">
+                  <Button
+                    variant="outline"
+                    className="border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white w-full"
+                  >
+                    Login
+                  </Button>
+                </Link>
+
+                <Link href="/auth/register">
+                  <Button className="bg-red-600 hover:bg-red-700 text-white w-full">
+                    Register Now
+                  </Button>
+                </Link>
               </div>
             </nav>
           </div>

@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ChevronRight, ArrowRight } from "lucide-react"
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -34,13 +35,17 @@ export default function Home() {
               streams with expert faculty and proven results.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 text-lg">Explore Courses</Button>
-              <Button
+              <Link href="/courses">
+                <Button className="bg-red-600 hover:bg-red-700 text-white px-8 py-6 text-lg">
+                  Explore Courses
+                </Button>
+              </Link>
+              {/* <Button
                 variant="outline"
                 className="bg-white text-black border-white hover:bg-transparent hover:text-white transition-colors px-8 py-6 text-lg"
               >
                 Book a Free Session
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
@@ -66,9 +71,9 @@ export default function Home() {
                 <li>• Regular progress monitoring</li>
                 <li>• Personality development</li>
               </ul>
-              <Button variant="outline" className="w-full">
+              {/* <Button variant="outline" className="w-full">
                 Learn More
-              </Button>
+              </Button> */}
             </Card>
 
             {/* Middle Section */}
@@ -80,9 +85,9 @@ export default function Home() {
                 <li>• Board exam readiness</li>
                 <li>• Career guidance</li>
               </ul>
-              <Button variant="outline" className="w-full">
+              {/* <Button variant="outline" className="w-full">
                 Learn More
-              </Button>
+              </Button> */}
             </Card>
 
             {/* Senior Section */}
@@ -94,67 +99,16 @@ export default function Home() {
                 <li>• Specialized subject focus</li>
                 <li>• Career counseling</li>
               </ul>
-              <Button variant="outline" className="w-full">
+              {/* <Button variant="outline" className="w-full">
                 Learn More
-              </Button>
+              </Button> */}
             </Card>
           </div>
         </div>
       </section>
 
       {/* Stream Specialization Section */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Stream Specializations</h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Science Stream */}
-            <Card className="relative overflow-hidden border-2 hover:border-blue-900 transition-all">
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue-900"></div>
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-4">Science</h3>
-                <ul className="space-y-3 text-gray-600 mb-6">
-                  <li>• Physics, Chemistry, Mathematics</li>
-                  <li>• Biology (Medical Stream)</li>
-                  <li>• Practical Lab Sessions</li>
-                  <li>• JEE/NEET Preparation</li>
-                </ul>
-                <Button className="w-full bg-blue-900 hover:bg-blue-800 text-white">Explore Science Stream</Button>
-              </CardContent>
-            </Card>
-
-            {/* Commerce Stream */}
-            <Card className="relative overflow-hidden border-2 hover:border-red-600 transition-all">
-              <div className="absolute top-0 left-0 w-full h-1 bg-red-600"></div>
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-4">Commerce</h3>
-                <ul className="space-y-3 text-gray-600 mb-6">
-                  <li>• Accountancy & Business Studies</li>
-                  <li>• Economics & Mathematics</li>
-                  <li>• Financial Markets</li>
-                  <li>• CA/CS Foundation Prep</li>
-                </ul>
-                <Button className="w-full bg-red-600 hover:bg-red-700 text-white">Explore Commerce Stream</Button>
-              </CardContent>
-            </Card>
-
-            {/* Arts Stream */}
-            <Card className="relative overflow-hidden border-2 hover:border-yellow-500 transition-all">
-              <div className="absolute top-0 left-0 w-full h-1 bg-yellow-500"></div>
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold mb-4">Arts</h3>
-                <ul className="space-y-3 text-gray-600 mb-6">
-                  <li>• History & Political Science</li>
-                  <li>• Psychology & Sociology</li>
-                  <li>• Economics & Geography</li>
-                  <li>• Literature & Languages</li>
-                </ul>
-                <Button className="w-full bg-yellow-500 hover:bg-yellow-600 text-black">Explore Arts Stream</Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
 
       {/* Testimonials Section */}
       <section className="py-16 bg-white">
@@ -218,18 +172,24 @@ export default function Home() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[1, 2, 3, 4].map((_, index) => (
+            {[
+              { name: "Mr. Shyam Maurya", expertise: "Mathematics Expert", details: "M.Sc. Mathematics (JMI) with 15+ years of teaching experience" },
+              { name: "Mr. Udit Gupta", expertise: "Physics Expert", details: "M.Sc. Physics (University of Delhi) with 15+ years of teaching experience" },
+              { name: "Dr. Madhur Singh", expertise: "Chemistry Expert", details: "Ph.D. in Organic Chemistry wtih 10+ years of experience" },
+              { name: "Mr. Abhinav Gupta", expertise: "Social Science Expert", details: "M.sc. Social Science (Delhi University) with 10+ years of experience" }
+            ].map((teacher, index) => (
               <div key={index} className="text-center">
                 <div className="w-48 h-48 bg-gray-200 rounded-full mx-auto mb-4"></div>
-                <h3 className="text-xl font-bold">Dr. Sharma</h3>
-                <p className="text-blue-900">Physics Expert</p>
-                <p className="text-gray-600 mt-2">Ph.D. from IIT Delhi with 15+ years of teaching experience</p>
+                <h3 className="text-xl font-bold">{teacher.name}</h3>
+                <p className="text-blue-900">{teacher.expertise}</p>
+                <p className="text-gray-600 mt-2">{teacher.details}</p>
               </div>
             ))}
           </div>
 
+
           <div className="text-center mt-12">
-            <Button className="bg-blue-900 hover:bg-blue-800">View All Faculty Members</Button>
+            <Link href='/faculty'><Button className="bg-blue-900 hover:bg-blue-800">View All Faculty Members</Button></Link>
           </div>
         </div>
       </section>
@@ -244,20 +204,20 @@ export default function Home() {
                 Join Challenger Classes today and take the first step towards academic excellence. Our expert faculty
                 and comprehensive curriculum will guide you from darkness to brightness.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="bg-red-600 hover:bg-red-700 text-white">Enroll Now</Button>
                 <Button variant="outline" className="border-white text-white hover:bg-white/10">
                   Schedule a Consultation
                 </Button>
-              </div>
+              </div> */}
             </div>
             <div className="bg-gradient-to-r from-blue-900 to-black p-8 rounded-lg">
               <h3 className="text-2xl font-bold mb-4">Upcoming Batches</h3>
               <ul className="space-y-4">
                 {[
-                  { course: "JEE Main & Advanced", date: "Starting July 15, 2023" },
-                  { course: "NEET Preparation", date: "Starting August 1, 2023" },
-                  { course: "Foundation Course (Class 11)", date: "Starting June 20, 2023" },
+                  { course: "PCM Class 12", date: "Starting April 1, 2025" },
+                  { course: "PCB Class 12", date: "Starting April 1, 2025" },
+                  { course: "Foundation Course (Class 11)", date: "Starting April 5, 2025" },
                 ].map((batch, index) => (
                   <li key={index} className="flex items-start">
                     <ArrowRight className="h-5 w-5 text-yellow-500 mr-2 mt-1 flex-shrink-0" />
@@ -268,9 +228,9 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Button variant="link" className="text-yellow-500 mt-4 pl-0">
+              {/* <Button variant="link" className="text-yellow-500 mt-4 pl-0">
                 View All Batches <ChevronRight className="ml-1 h-4 w-4" />
-              </Button>
+              </Button> */}
             </div>
           </div>
         </div>
