@@ -8,13 +8,15 @@ type RecentRegistrationsProps = {
 
 export async function RecentRegistrations({ limit = 5 }: RecentRegistrationsProps) {
   // Fetch users from the database
-  const users = await db.user.findMany()
+  const users = await db.user.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    take: limit,
+  })
 
-  // Filter out admin users and limit the results
-  const students = users
-    .filter((user) => user.role === "STUDENT")
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, limit)
+  // Filter out admin users
+  const students = users.filter((user) => user.role === "STUDENT")
 
   if (students.length === 0) {
     return <div className="text-center py-8 text-gray-500">No student registrations yet</div>

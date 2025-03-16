@@ -11,7 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { logout } from "@/lib/auth-actions"
+import { signOut } from "next-auth/react"
 import { User, LogOut, Settings } from "lucide-react"
 
 type AdminHeaderProps = {
@@ -64,7 +64,7 @@ export function AdminHeader({ user }: AdminHeaderProps) {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => logout()}>
+                <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/auth/login" })}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>

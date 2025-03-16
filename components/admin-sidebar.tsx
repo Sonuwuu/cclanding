@@ -16,7 +16,7 @@ export function AdminSidebar() {
     },
     {
       name: "Students",
-      href: "/admin/students",
+      href: "/admin/users",
       icon: Users,
     },
     {
