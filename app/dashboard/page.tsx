@@ -1,29 +1,11 @@
-import { redirect } from "next/navigation"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { db } from "@/lib/db"
 import { BookOpen, FileText, Calendar, MessageSquare } from "lucide-react"
 
-export default async function DashboardPage() {
-  // Check if user is authenticated
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect("/auth/login")
-  }
-
-  // Fetch user details
-  const user = await db.user.findUnique({
-    where: { id: session.user.id },
-  })
-
-  if (!user) {
-    redirect("/auth/login")
-  }
+export default function DashboardPage() {
+  const user = { firstName: "John", lastName: "Doe", grade: "10", stream: "Science" };
 
   return (
     <div className="min-h-screen flex flex-col">

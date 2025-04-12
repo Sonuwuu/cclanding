@@ -131,11 +131,12 @@ export default function RegisterPage() {
 
       if (response.ok) {
         toast({
+          duration: 5000,
           title: "Registration successful",
           description: "Your account has been created. You can now log in.",
           variant: "default",
         })
-        router.push("/auth/login")
+        router.push("/auth/login");
       } else {
         toast({
           title: "Registration failed",

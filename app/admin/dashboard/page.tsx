@@ -4,20 +4,14 @@ import { AdminSidebar } from "@/components/admin-sidebar"
 import { DashboardStats } from "@/components/dashboard-stats"
 import { RecentRegistrations } from "@/components/recent-registrations"
 import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/app/api/auth/[...nextauth]/route"
-import { redirect } from "next/navigation"
 
 export default async function AdminDashboardPage() {
-  // Check if user is admin
-  const session = await getServerSession(authOptions)
-
-  if (!session || session.user.role !== "ADMIN") {
-    redirect("/auth/login")
-  }
+  // Bypass admin check and assume the user is an admin
+  const userName = "Admin User";
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">
-      <AdminHeader user={session.user} />
+      <AdminHeader user={{ name: userName }} />
 
       <div className="flex-1 flex">
         <AdminSidebar />
@@ -25,7 +19,7 @@ export default async function AdminDashboardPage() {
         <main className="flex-1 p-6">
           <div className="mb-8">
             <h1 className="text-3xl font-bold">Admin Dashboard</h1>
-            <p className="text-gray-600">Welcome back, {session.user.name}</p>
+            <p className="text-gray-600">Welcome back, {userName}</p>
           </div>
 
           <DashboardStats />

@@ -27,7 +27,6 @@ export function Header() {
       ],
     },
     { name: "Our Faculty", href: "/faculty" },
-    { name: "Study Material", href: "/study-material" },
     { name: "Contact Us", href: "/contact" },
   ]
 

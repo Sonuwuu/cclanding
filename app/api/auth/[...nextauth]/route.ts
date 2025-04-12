@@ -1,68 +1,73 @@
-import NextAuth from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { db } from "@/lib/db"
-import bcrypt from "bcryptjs"
+import NextAuth, { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { Pool } from "pg";
+import bcrypt from "bcrypt";
 
-export const authOptions = {
-  adapter: PrismaAdapter(db),
-  session: { strategy: "jwt" },
+const pool = new Pool({
+  connectionString:
+    "postgres://postgres.yvirkmvwvujlxfmkjsnx:0IxSdMwu3rO8DWWY@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x",
+});
+
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: "credentials",
       credentials: {
-        email: { label: "Email", type: "text" },
+        email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error("Missing credentials")
+      async authorize(credentials, req) {
+        if (!credentials?.email || !credentials.password) {
+          return null;
         }
 
-        const user = await db.user.findUnique({
-          where: { email: credentials.email },
-        })
+        try {
+          const result = await pool.query(
+            "SELECT email, password_hash FROM users WHERE email = $1",
+            [credentials.email]
+          );
 
-        if (!user) {
-          throw new Error("User not found")
-        }
+          if (result.rows.length === 0) {
+            return null;
+          }
 
-        const isValid = await bcrypt.compare(credentials.password, user.password)
-        if (!isValid) {
-          throw new Error("Invalid credentials")
-        }
+          const user = result.rows[0];
+          const isValid = await bcrypt.compare(
+            credentials.password,
+            user.password_hash
+          );
 
-        return {
-          id: user.id,
-          email: user.email,
-          name: `${user.firstName} ${user.lastName}`,
-          role: user.role,
+          if (isValid) {
+            return { email: user.email }; // Return an object with the user identifier (email in this case)
+          }
+
+          return null;
+        } catch (error) {
+          console.error("Authorization error:", error);
+          return null;
         }
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+  },
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.id = user.id
-        token.role = user.role
+        token.email = user.email;
       }
-      return token
+      return token;
     },
     async session({ session, token }) {
-      if (session.user) {
-        session.user.id = token.id as string
-        session.user.role = token.role as string
+      if (token?.email) {
+        session.user.email = token.email;
       }
-      return session
+      return session;
     },
   },
-  pages: {
-    signIn: "/auth/login",
-  },
-}
+};
 
-const handler = NextAuth(authOptions)
-
-export { handler as GET, handler as POST }
-
+const handler = NextAuth(authOptions);
+export { handler as GET, handler as POST };

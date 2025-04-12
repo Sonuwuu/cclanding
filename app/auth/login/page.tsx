@@ -25,6 +25,7 @@ export default function LoginPage() {
   const { toast } = useToast()
 
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log("Handle submit triggered");
     e.preventDefault()
     setIsLoading(true)
 
@@ -47,17 +48,11 @@ export default function LoginPage() {
           description: "You have been logged in successfully.",
           variant: "default",
         })
-
-        // Fetch user data to determine role
-        const response = await fetch("/api/user")
-        const userData = await response.json()
-
-        // Redirect based on user role
-        if (userData.role === "ADMIN") {
-          router.push("/admin/dashboard")
-        } else {
-          router.push("/dashboard")
-        }
+        
+        // Set default user role and redirect
+        const defaultRole = "USER"; // Or "ADMIN" for admin role
+        const redirectPath = defaultRole === "ADMIN" ? "/admin/dashboard" : "/dashboard";
+        router.push(redirectPath);
       }
     } catch (error) {
       toast({

@@ -1,50 +1,84 @@
-import { NextResponse } from "next/server"
-import bcrypt from "bcryptjs"
-import { db } from "@/lib/db"
+import { NextResponse } from "next/server";
+import bcrypt from "bcrypt";
+import { Pool } from "pg";
 
-export async function POST(request: Request) {
+const pool = new Pool({
+  connectionString: "postgres://postgres.yvirkmvwvujlxfmkjsnx:0IxSdMwu3rO8DWWY@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x",
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+export async function POST(req: Request) {
   try {
-    const body = await request.json()
-    const { firstName, lastName, email, password, phone, grade, stream } = body
+    const { firstName, lastName, email, phone, password, grade, stream } =
+      await req.json();
 
-    // Validate required fields
-    if (!email || !password || !firstName || !lastName) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
+    if (
+      !firstName ||
+      !lastName ||
+      !email ||
+      !phone ||
+      !password ||
+      !grade
+    ) {
+      return NextResponse.json(
+        { error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
-    // Check if user exists
-    const existingUser = await db.user.findUnique({
-      where: { email },
-    })
-
-    if (existingUser) {
-      return NextResponse.json({ error: "User already exists" }, { status: 400 })
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
     }
 
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10)
+    if (!/^\d{10}$/.test(phone)) {
+      return NextResponse.json(
+        { error: "Invalid phone number format (10 digits required)" },
+        { status: 400 }
+      );
+    }
 
-    // Create user
-    const user = await db.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        firstName,
-        lastName,
-        phone: phone || null,
-        grade: grade || null,
-        stream: stream || null,
-        role: "STUDENT",
-      },
-    })
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Remove password from response
-    const { password: _, ...userWithoutPassword } = user
+    console.log("Registration data:", { firstName, lastName, email, phone, hashedPassword, grade, stream });
 
-    return NextResponse.json({ message: "User registered successfully", user: userWithoutPassword }, { status: 201 })
-  } catch (error) {
-    console.error("Registration error:", error)
-    return NextResponse.json({ error: "An error occurred during registration" }, { status: 500 })
+
+
+
+    const result = await pool.query(
+      `
+      INSERT INTO users (first_name, last_name, email, phone, password_hash, grade, stream)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      RETURNING id
+    `,
+      [firstName, lastName, email, phone, hashedPassword, grade, stream]
+    );
+
+    console.log("Database insertion result:", result);
+
+    return NextResponse.json({ success: true });
+  } catch (error: any) {
+    console.error("Registration error:", error);
+
+    if (error.code === "23505") {
+      // Unique violation (duplicate key)
+      if (error.constraint === "users_email_key") {
+        return NextResponse.json(
+          { error: "Email already in use" },
+          { status: 400 }
+        );
+      } else if (error.constraint === "users_phone_key") {
+        return NextResponse.json(
+          { error: "Phone number already in use" },
+          { status: 400 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      { error: "Registration failed" },
+      { status: 400 }
+    );
   }
 }
-
