@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { Pool } from "pg";
 
 const pool = new Pool({
-  connectionString: "postgres://postgres.yvirkmvwvujlxfmkjsnx:0IxSdMwu3rO8DWWY@aws-0-ap-south-1.pooler.supabase.com:6543/postgres?sslmode=require&supa=base-pooler.x",
+  connectionString: process.env.POSTGRES_URL,
   ssl: {
     rejectUnauthorized: false,
   },
@@ -27,6 +27,20 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
+
+    if (typeof firstName !== 'string' || firstName.length < 2 || firstName.length > 50) {
+      return NextResponse.json({ error: "Invalid first name" }, { status: 400 });
+    }
+
+    if (typeof lastName !== 'string' || lastName.length < 2 || lastName.length > 50) {
+      return NextResponse.json({ error: "Invalid last name" }, { status: 400 });
+    }
+
+    if (typeof grade !== 'string' || isNaN(parseInt(grade)) || parseInt(grade) < 1 || parseInt(grade) > 12) {
+      return NextResponse.json({ error: "Invalid grade" }, { status: 400 });
+    }
+    const gradeNumber = parseInt(grade, 10);
+
 
     if (!/\S+@\S+\.\S+/.test(email)) {
       return NextResponse.json({ error: "Invalid email format" }, { status: 400 });
@@ -52,7 +66,7 @@ export async function POST(req: Request) {
       VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING id
     `,
-      [firstName, lastName, email, phone, hashedPassword, grade, stream]
+      [firstName, lastName, email, phone, hashedPassword, gradeNumber, stream]
     );
 
     console.log("Database insertion result:", result);
